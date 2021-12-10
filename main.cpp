@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 #include <stack>
 #include <stdio.h>
@@ -52,7 +50,6 @@ bool textEditor::deleteCharacter(){
 }
 
 bool textEditor::backSpaceCharacter(){
-
     if (leftStack.empty())
         return false;
     else
@@ -61,7 +58,6 @@ bool textEditor::backSpaceCharacter(){
 }
 
 void textEditor::moveCursor(int position){
-
     int leftSize, rightSize, count;
     leftSize = leftStack.size();
     rightSize = rightStack.size();
@@ -98,7 +94,6 @@ void textEditor::moveRight(int count){
 }
 
 void textEditor::findAndReplaceChar(char findWhat, char replaceWith){
-
     int count=1, originalCursorPoistion = leftStack.size();
     moveCursor(0);
     while(!rightStack.empty()) {
@@ -128,7 +123,8 @@ int main(){
         fp=fopen(fn,"r");
         printf("\t\t\t\t\t\t\t\t Readmode");
         while((in=getc(fp))!=EOF){
-            printf("%c",in);            
+            printf("%c",in);   
+            text.moveRight(1);
         }
         fclose(fp);
     }
@@ -138,6 +134,7 @@ int main(){
         printf("\t\t\t\t\t\t To save file press ctrl+z \n");
         while((in=getchar())!=EOF){
             putc(in,fp);
+            text.insertCharacter(in);
         }
         fclose(fp);
     }
@@ -147,6 +144,7 @@ int main(){
         printf("\t\t\t\t\t\t To save file press ctrl+z \n");
         while((in=getchar())!=EOF){
             putc(in,fp);
+            text.insertCharacter(in);
         }
         fclose(fp);
     }
