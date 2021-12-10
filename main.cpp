@@ -1,7 +1,10 @@
+
+
 #include <iostream>
 #include <stack>
+#include <stdio.h>
+#include <conio.h>
 using namespace std;
-
 class textEditor {
     private:
     stack<char> leftStack; //Left stack
@@ -18,7 +21,6 @@ class textEditor {
         void findAndReplaceChar(char findWhat, char replaceWith);
         void examineTop();
 };
-
 void textEditor::examineTop(){
     if(leftStack.empty())
         cout << "leftStack: empty\t";
@@ -29,7 +31,6 @@ void textEditor::examineTop(){
     else
         cout << "rightStack: " << rightStack.top() << "," << rightStack.size() << endl;
 } 
-
 void textEditor::insertWord(char word[]) {
     int i=0;
     while(word[i]!='\0') {
@@ -112,46 +113,53 @@ void textEditor::findAndReplaceChar(char findWhat, char replaceWith){
     moveCursor(originalCursorPoistion); 
 } 
 
-int main() {
-    int i=0; char text[80];
-    textEditor txt;
-
-    cout << "Enter the word to be inserted: ";
-    cin.getline(text,80);
-    txt.insertWord(text);
-
-    cout << "Inserting the word:";
-    txt.examineTop();
-
-    cout << "Enter the word to be inserted: ";
-    cin.getline(text,80);
-    txt.insertWord(text);
-    cout << "Inserting the word:";
-    txt.examineTop();
-    cout << "Move cursor to the position 14: ";
-    txt.moveCursor(14); txt.examineTop();
-    cout << "Move cursor to the position 17: ";
-    txt.moveCursor(17);
-    txt.examineTop();
-
-    for(i=0;i<3;i++){
-        if(!txt.deleteCharacter())
-            cout << "There is nothing to delete. Move your cursor accordingly to delete the character";
-        else
-            cout << "Delete characters using DEL: ";
-            txt.examineTop();
+int main(){
+    FILE *fp;
+    char in,fn[35];
+    char cho;
+    textEditor text;
+    
+    printf("\t\t\t\t\t\t\t\tNOTEPAD\n");
+    printf("\t \t \t Enter file name");
+    gets(fn);
+    printf("\t Enter your choice : \n Write:w \n Read: r \n Add: a \n");
+    scanf("%c",&cho);
+    if(cho=='r'){
+        fp=fopen(fn,"r");
+        printf("\t\t\t\t\t\t\t\t Readmode");
+        while((in=getc(fp))!=EOF){
+            printf("%c",in);            
+        }
+        fclose(fp);
     }
-
-    for(i=0;i<7;i++){
-        if(!txt.backSpaceCharacter())
-            cout << "There is nothing to delete. Move your cursor accordingly to delete the character";
-        else
-            cout << "Delete characters using Backspace: ";
-            txt.examineTop();
+    else if(cho=='w'){
+        fp=fopen(fn,"w");
+        printf("\t\t\t\t\t\t Write Mode\n");
+        printf("\t\t\t\t\t\t To save file press ctrl+z \n");
+        while((in=getchar())!=EOF){
+            putc(in,fp);
+        }
+        fclose(fp);
     }
-
-    txt.findAndReplaceChar('t','T');
-    cout << "Replace occurrences of t with T: ";
-    txt.examineTop();
+    else if(cho=='a'){
+        fp=fopen(fn,"a");
+        printf("\t\t\t\t\t\t Add Mode\n");
+        printf("\t\t\t\t\t\t To save file press ctrl+z \n");
+        while((in=getchar())!=EOF){
+            putc(in,fp);
+        }
+        fclose(fp);
+    }
+    getch();
     return 0;
-}
+
+    }
+
+
+
+
+
+
+
+
+
