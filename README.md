@@ -1,7 +1,6 @@
 # TextEditor
 
-Text Editor application build based on the Data Structure Stack and Object Oriented Programming in C++.
-(Currently Incomplete🙈)
+Text Editor application build based on the Data Structure Stack and Object Oriented Programming and File Handling in C++.
 
 ## Problem Statement
 A text editor is a program that allows the user to open, view, and edit plain text files (files containing only text). 
