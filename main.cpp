@@ -1,163 +1,186 @@
 #include <iostream>
 #include <stack>
-#include <stdio.h>
-#include <conio.h>
+#include<bits/stdc++.h>
 using namespace std;
-class textEditor {
-    private:
-    stack<char> leftStack; //Left stack
-    stack<char> rightStack; //Right stack
+void PrintStackR(stack<char> *s){
+    if (s->empty())
+        return;
+    char x = s->top();
+    s->pop();
+    PrintStackR(s);
+    cout<<x;
+    s->push(x);
+}
 
+void PrintStack(stack<char> *s){
+    if (s->empty())
+        return;
+    char x = s->top();
+    s->pop();
+    cout<<x;
+    PrintStack(s);
+    s->push(x);
+}
+ 
+class text_editor{
     public:
-        void insertWord(char word[]);
-        void insertCharacter(char character);
-        bool deleteCharacter();
-        bool backSpaceCharacter();
-        void moveCursor(int position);
-        void moveLeft(int position);
-        void moveRight(int position);
-        void findAndReplaceChar(char findWhat, char replaceWith);
-        void examineTop();
+    stack<char> *left;
+    stack<char> *right;
+    stack<char> *redof;
+    text_editor(){
+        left=new stack<char>();
+        right=new stack<char>();
+        redof=new stack<char>();
+    }
+    void insert(string input){
+        for(int i=0;i<input.size();i++){
+            left->push(input[i]);
+        }
+    }
+    void backspace(){
+        if(left->empty()){
+            return;
+        }
+        else{
+            left->pop();
+        }
+    }
+    void delet(){
+        if(right->empty()){
+            return;
+        }
+        else{
+            right->pop();
+        }
+    }
+    void undo(){
+        redof->push(left->top());
+        left->pop();
+    }
+    void redo(){
+        left->push(redof->top());
+        redof->pop();
+    }
+    void move_left(int amount){
+        while(!left->empty() && amount>0){
+            right->push(left->top());
+            left->pop();
+            amount--;
+        }
+    }
+    void move_right(int amount){
+        if(right->empty()){
+            while(amount--){
+                left->push(' ');
+            }    
+        }
+        else{
+            while(!right->empty() && amount>0){
+                if(right->empty()){
+                    left->push(' ');
+                }
+                left->push(right->top());
+                right->pop();
+                amount--;
+            }
+        }
+    }
+    void read(){
+        PrintStackR(left);
+        PrintStack(right); 
+}
 };
-void textEditor::examineTop(){
-    if(leftStack.empty())
-        cout << "leftStack: empty\t";
-    else
-        cout << "leftStack: " << leftStack.top() << "," << leftStack.size() << "\t\t";
-    if(rightStack.empty())
-        cout << "rightStack: empty\n";
-    else
-        cout << "rightStack: " << rightStack.top() << "," << rightStack.size() << endl;
-} 
-void textEditor::insertWord(char word[]) {
-    int i=0;
-    while(word[i]!='\0') {
-        insertCharacter(word[i]);
-        i++;
-    }
-}
-
-void textEditor::insertCharacter(char character){
-    leftStack.push(character);
-}
-
-bool textEditor::deleteCharacter(){
-    if (rightStack.empty())
-        return false;
-    else
-        rightStack.pop();
-    return true;
-}
-
-bool textEditor::backSpaceCharacter(){
-    if (leftStack.empty())
-        return false;
-    else
-        leftStack.pop();
-    return true;
-}
-
-void textEditor::moveCursor(int position){
-    int leftSize, rightSize, count;
-    leftSize = leftStack.size();
-    rightSize = rightStack.size();
-    if (position < leftSize)
-        moveLeft(position);
-    else {
-        count = position - leftSize;
-        moveRight(count);
-    }
-}
-
-void textEditor::moveLeft(int position){
-    int leftSize;
-    leftSize = leftStack.size();
-    while(position!=leftSize) {
-        rightStack.push(leftStack.top());
-        leftStack.pop();
-        leftSize = leftStack.size();
-    }
-}
-
-void textEditor::moveRight(int count){
-    int rightSize, i=1;
-    rightSize = rightStack.size();
-    if (count > rightSize)
-        cout << "Cannot move the cursor, right, to the specified position";
-    else {
-        while(i<=count) {
-            leftStack.push(rightStack.top());
-            rightStack.pop();
-            i++;
-        } 
-    } 
-}
-
-void textEditor::findAndReplaceChar(char findWhat, char replaceWith){
-    int count=1, originalCursorPoistion = leftStack.size();
-    moveCursor(0);
-    while(!rightStack.empty()) {
-        if(rightStack.top()==findWhat) {
-        deleteCharacter();
-        insertCharacter(replaceWith);
-        }
-        else
-            moveCursor(count);
-            count++;
-    } 
-    moveCursor(originalCursorPoistion); 
-} 
-
 int main(){
-    FILE *fp;
-    char in,fn[35];
-    char cho;
-    textEditor text;
-    
-    printf("\t\t\t\t\t\t\t\tNOTEPAD\n");
-    printf("\t \t \t Enter file name");
-    gets(fn);
-    printf("\t Enter your choice : \n Write:w \n Read: r \n Add: a \n");
-    scanf("%c",&cho);
-    if(cho=='r'){
-        fp=fopen(fn,"r");
-        printf("\t\t\t\t\t\t\t\t Readmode");
-        while((in=getc(fp))!=EOF){
-            printf("%c",in);   
-            text.moveRight(1);
+    text_editor content;
+    cout<<"----MENU----"<<endl;
+    cout<<"1. Write Text \n2. Read Text \n3. Remove Text \n4. Delete Text \n5. Move cursor Left \n6. Move cursor Right \n7. Undo \n8. Redo \n9. Exit"<<endl;
+    int a;
+    cout<<"Enter your Choice: ";
+    cin>>a;
+    while(a<=9){
+        switch(a){
+            case 1:{
+                string s;
+                cout<<"Enter text to write: ";
+                cin.ignore();
+                getline(cin,s);
+                content.insert(s);
+                cout<<"Text Added!"<<endl;
+                break;
+            }
+            case 2:{
+                cout<<"Your text is as follows-"<<endl;
+                content.read();
+                cout<<endl;
+                break;
+            }
+            case 3:{
+                int d;
+                cin.ignore();
+                cout<<"Enter number of characters to remove: ";
+                cin>>d;
+                while(d--){
+                    content.backspace();
+                }
+                cout<<"Text Deleted!"<<endl;
+                break;
+            }
+            case 4:{
+                int d;
+                cin.ignore();
+                cout<<"Enter number of characters to delete: ";
+                cin>>d;
+                while(d--){
+                    content.delet();
+                }
+                cout<<"Text Deleted!"<<endl;
+                break;
+            }
+            case 5:{
+                int p;
+                cin.ignore();
+                cout<<"Enter number of positions to shift cursor left by: ";
+                cin>>p;
+                content.move_left(p);
+                cout<<"Cursor shifted!"<<endl;
+                break;
+            }
+            case 6:{
+                int p;
+                cin.ignore();
+                cout<<"Enter number of positions to shift cursor right by: ";
+                cin>>p;
+                content.move_right(p);
+                cout<<"Cursor shifted!"<<endl;
+                break;
+            }
+            case 7:{
+                content.undo();
+                cout<<"Undo Done!"<<endl;
+                break;
+            }
+            case 8:{
+                content.redo();
+                cout<<"Redo Done!"<<endl;
+                break;
+            }
+            case 9:{
+                cout<<"EXITING"<<endl;
+                cout<<"\n\n-----THANK YOU FOR USING TEXT-IT-UP-----"<<endl;
+                break;
+            }
+            default:{
+                cout<<"Invalid Choice"<<endl;
+                break;
+            }
         }
-        fclose(fp);
-    }
-    else if(cho=='w'){
-        fp=fopen(fn,"w");
-        printf("\t\t\t\t\t\t Write Mode\n");
-        printf("\t\t\t\t\t\t To save file press ctrl+z \n");
-        while((in=getchar())!=EOF){
-            putc(in,fp);
-            text.insertCharacter(in);
+        if(a==9){
+            break;
         }
-        fclose(fp);
-    }
-    else if(cho=='a'){
-        fp=fopen(fn,"a");
-        printf("\t\t\t\t\t\t Add Mode\n");
-        printf("\t\t\t\t\t\t To save file press ctrl+z \n");
-        while((in=getchar())!=EOF){
-            putc(in,fp);
-            text.insertCharacter(in);
+        else{
+            cout<<"Enter your Choice: ";
+            cin>>a;
         }
-        fclose(fp);
     }
-    getch();
     return 0;
-
-    }
-
-
-
-
-
-
-
-
-
+}
