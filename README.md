@@ -25,4 +25,5 @@ Use 2 stacks to depict the text editor
 
 ##
 
-![carbon](https://user-images.githubusercontent.com/77978729/146601685-f540e4ac-eba2-457e-b678-86a9cc9ff39d.png)
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/77978729/146603312-3b970521-de58-4d2f-8a38-bcf2fbd01619.gif)
+
