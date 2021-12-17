@@ -22,5 +22,7 @@ Use 2 stacks to depict the text editor
 | Move cursor to the right           | copy the required characters from right stack to left stack     |
 | To replace                         | Use a combination of move cursor with DEL and insert operations |
 
+
 ##
-![carbon](https://user-images.githubusercontent.com/77978729/146440456-63b91e0d-379a-4453-b00c-a3da914ad4d2.png)
+
+![carbon](https://user-images.githubusercontent.com/77978729/146601685-f540e4ac-eba2-457e-b678-86a9cc9ff39d.png)
